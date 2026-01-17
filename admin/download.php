@@ -1,21 +1,26 @@
 <?php
 session_start();
-require __DIR__ . "/config/db.php";
+require __DIR__ . "/../config/db.php";
+require __DIR__ . "/../includes/auth_admin.php";
 
-if (!isset($_SESSION['admin'], $_GET['id'])) {
-    die("Unauthorized");
-}
+$id = intval($_GET['id'] ?? 0);
 
-$id = (int) $_GET['id'];
-
-$stmt = $pdo->prepare("SELECT * FROM documents WHERE id = ?");
+$stmt = $pdo->prepare("SELECT filename, title FROM documents WHERE id = ?");
 $stmt->execute([$id]);
 $doc = $stmt->fetch();
 
-$filePath = __DIR__ . "/private/uploads/" . $doc['filename'];
+if (!$doc) {
+    die("File not found");
+}
+
+$filePath = __DIR__ . "/../private/uploads/" . $doc['filename'];
+
+if (!file_exists($filePath)) {
+    die("File missing");
+}
 
 header("Content-Type: application/pdf");
-header("Content-Disposition: attachment; filename=\"" . $doc['filename'] . "\"");
+header("Content-Disposition: attachment; filename=\"" . basename($doc['title']) . ".pdf\"");
 header("Content-Length: " . filesize($filePath));
 
 readfile($filePath);

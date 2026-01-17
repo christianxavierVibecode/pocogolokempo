@@ -1,22 +1,42 @@
 <?php
 session_start();
-require "config/db.php";
+require __DIR__ . "/../config/db.php";
+require __DIR__ . "/../includes/auth_admin.php";
 
-if (!isset($_SESSION['admin'])) {
-    http_response_code(403);
-    exit("Access denied");
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: /pocogolo/documents.php");
+    exit;
 }
 
-$id = $_GET['id'];
+$title = trim($_POST['title'] ?? '');
 
-$stmt = $pdo->prepare("SELECT filename FROM documents WHERE id=?");
-$stmt->execute([$id]);
-$file = $stmt->fetch();
-
-if ($file) {
-    unlink(__DIR__ . "/private/uploads/" . $file['filename']);
-    $pdo->prepare("DELETE FROM documents WHERE id=?")->execute([$id]);
+if (!$title || !isset($_FILES['file'])) {
+    die("Invalid upload");
 }
 
-header("Location: documents.php");
+$original = $_FILES['file']['name'];
+$ext = strtolower(pathinfo($original, PATHINFO_EXTENSION));
+
+if ($ext !== 'pdf') {
+    die("Only PDF files allowed");
+}
+
+$filename = uniqid() . "_" . preg_replace("/[^a-zA-Z0-9_.-]/", "", $original);
+$uploadDir = __DIR__ . "/../private/uploads/";
+$path = $uploadDir . $filename;
+
+if (!is_writable($uploadDir)) {
+    die("Upload directory not writable");
+}
+
+if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
+    die("Upload failed");
+}
+
+$stmt = $pdo->prepare(
+    "INSERT INTO documents (title, filename) VALUES (?, ?)"
+);
+$stmt->execute([$title, $filename]);
+
+header("Location: /pocogolo/documents.php");
 exit;
