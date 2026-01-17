@@ -1,9 +1,11 @@
 <?php
 session_start();
+
 require __DIR__ . "/config/db.php";
+require __DIR__ . "/includes/auth_user.php"; // user must be logged in + verified
 
 /* ===============================
-   HANDLE ADMIN UPLOAD (POST)
+   HANDLE ADMIN UPLOAD
 ================================ */
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST' &&
@@ -17,17 +19,16 @@ if (
     $original = basename($_FILES['file']['name']);
     $ext = strtolower(pathinfo($original, PATHINFO_EXTENSION));
 
-    // Allow only PDF files (recommended)
     if ($ext !== 'pdf') {
         die("Only PDF files are allowed");
     }
 
-    $filename = uniqid() . "_" . $original;
+    $filename = uniqid() . "_" . preg_replace("/[^a-zA-Z0-9._-]/", "", $original);
     $uploadDir = __DIR__ . "/private/uploads/";
     $path = $uploadDir . $filename;
 
-    if (!is_writable($uploadDir)) {
-        die("Upload directory is not writable");
+    if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
+        die("Upload directory error");
     }
 
     if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
@@ -50,7 +51,6 @@ if (
     <meta charset="UTF-8">
     <title>Document Archives</title>
 
-    <!-- MAIN CSS -->
     <link rel="stylesheet" href="/pocogolo/public/css/documents.css">
     <link rel="stylesheet" href="/pocogolo/public/css/style.css">
     <link
@@ -65,36 +65,30 @@ if (
     <main class="container">
 
         <div class="page-header">
-            <h1>
-                Dokumen <span>Desa Poco Golo Kempo</span>
-            </h1>
+            <h1>Dokumen <span>Desa Poco Golo Kempo</span></h1>
             <p class="page-subtitle">
-                Berikut adalah dokumen-dokumen yang dapat diakses public
+                Dokumen hanya dapat diakses oleh pengguna terverifikasi
             </p>
         </div>
 
-
         <!-- ===============================
-         ADMIN UPLOAD SECTION
-        ================================ -->
+     ADMIN UPLOAD
+    ================================ -->
         <?php if (isset($_SESSION['admin'])): ?>
-
         <section class="admin-upload" id="uploadPanel">
             <h2>Upload Dokumen</h2>
 
             <form method="POST" enctype="multipart/form-data">
                 <input type="text" name="title" placeholder="Judul Dokumen" required>
-
                 <input type="file" name="file" accept="application/pdf" required>
-
                 <button type="submit">Upload</button>
             </form>
         </section>
         <?php endif; ?>
 
         <!-- ===============================
-         DOCUMENT LIST
-        ================================ -->
+     DOCUMENT LIST
+    ================================ -->
         <section class="documents-section">
 
             <div class="documents-header">
@@ -116,10 +110,10 @@ if (
                     <span>Aksi</span>
                 </div>
 
-                <?php 
-                $stmt = $pdo->query("SELECT * FROM documents ORDER BY uploaded_at DESC");
-                while ($doc = $stmt->fetch()):
-                ?>
+                <?php
+            $stmt = $pdo->query("SELECT * FROM documents ORDER BY uploaded_at DESC");
+            while ($doc = $stmt->fetch()):
+            ?>
                 <div class="table-row">
                     <!-- NAME -->
                     <div class="doc-name">
@@ -133,31 +127,31 @@ if (
                     <!-- FORMAT -->
                     <span>PDF</span>
 
-                    <!-- UPLOADED DATE -->
+                    <!-- DATE -->
                     <span><?= date("d M Y", strtotime($doc['uploaded_at'])) ?></span>
 
-                    <!-- ACTIONS (ONLY PLACE FOR VIEW / DELETE) -->
+                    <!-- ACTIONS -->
                     <div class="doc-actions">
-                        <a href="viewer.php?id=<?= $doc['id'] ?>" class="btn-view" target="_blank">
+                        <!-- VIEW (ALL USERS) -->
+                        <a href="view.php?id=<?= $doc['id'] ?>" target="_blank" class="btn-view">
                             View
                         </a>
+
+                        <!-- ADMIN ONLY -->
                         <?php if (isset($_SESSION['admin'])): ?>
-                        <a href="delete.php?id=<?= $doc['id'] ?>" class="btn-delete"
+                        <a href="/pocogolo/admin/download.php?id=<?= $doc['id'] ?>" class="btn-view">
+                            Download
+                        </a>
+                        <a href="/pocogolo/admin/delete.php?id=<?= $doc['id'] ?>" class="btn-delete"
                             onclick="return confirm('Delete this document?')">
                             Hapus
                         </a>
                         <?php endif; ?>
-                        <?php if (isset($_SESSION['admin'])): ?>
-                        <a href="download.php?id=<?= $doc['id'] ?>" class="btn-view">
-                            Download
-                        </a>
-                        <?php endif; ?>
-
                     </div>
                 </div>
-
                 <?php endwhile; ?>
             </div>
+
         </section>
 
     </main>
