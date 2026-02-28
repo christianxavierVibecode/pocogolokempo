@@ -1,16 +1,25 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require __DIR__ . "/config/db.php";
-require __DIR__ . "/includes/auth_user.php"; // user must be logged in + verified
+
+/* ===============================
+   REQUIRE LOGIN (ADMIN OR USER)
+================================ */
+if (!isset($_SESSION['role'])) {
+    header("Location: /pocogolo/auth/login.php");
+    exit;
+}
+
+$isAdmin = ($_SESSION['role'] === 'admin');
 
 /* ===============================
    HANDLE ADMIN UPLOAD
 ================================ */
-if (
-    $_SERVER['REQUEST_METHOD'] === 'POST' &&
-    isset($_SESSION['admin'])
-) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isAdmin) {
+
     if (!isset($_FILES['file'], $_POST['title'])) {
         die("Invalid upload");
     }
@@ -27,8 +36,8 @@ if (
     $uploadDir = __DIR__ . "/private/uploads/";
     $path = $uploadDir . $filename;
 
-    if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
-        die("Upload directory error");
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
     }
 
     if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
@@ -36,13 +45,19 @@ if (
     }
 
     $stmt = $pdo->prepare(
-        "INSERT INTO documents (title, filename) VALUES (?, ?)"
+        "INSERT INTO documents (title, filename, uploaded_at) VALUES (?, ?, NOW())"
     );
     $stmt->execute([$title, $filename]);
 
     header("Location: documents.php");
     exit;
 }
+
+/* ===============================
+   FETCH DOCUMENTS
+================================ */
+$stmt = $pdo->query("SELECT * FROM documents ORDER BY uploaded_at DESC");
+$documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,9 +68,6 @@ if (
 
     <link rel="stylesheet" href="/pocogolo/public/css/documents.css">
     <link rel="stylesheet" href="/pocogolo/public/css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
@@ -72,9 +84,9 @@ if (
         </div>
 
         <!-- ===============================
-     ADMIN UPLOAD
+         ADMIN UPLOAD
     ================================ -->
-        <?php if (isset($_SESSION['admin'])): ?>
+        <?php if ($isAdmin): ?>
         <section class="admin-upload" id="uploadPanel">
             <h2>Upload Dokumen</h2>
 
@@ -87,14 +99,14 @@ if (
         <?php endif; ?>
 
         <!-- ===============================
-     DOCUMENT LIST
+         DOCUMENT LIST
     ================================ -->
         <section class="documents-section">
 
             <div class="documents-header">
                 <h2>List Dokumen</h2>
 
-                <?php if (isset($_SESSION['admin'])): ?>
+                <?php if ($isAdmin): ?>
                 <button class="add-btn"
                     onclick="document.getElementById('uploadPanel').scrollIntoView({behavior:'smooth'})">
                     + Tambah Dokumen
@@ -110,12 +122,9 @@ if (
                     <span>Aksi</span>
                 </div>
 
-                <?php
-            $stmt = $pdo->query("SELECT * FROM documents ORDER BY uploaded_at DESC");
-            while ($doc = $stmt->fetch()):
-            ?>
+                <?php foreach ($documents as $doc): ?>
                 <div class="table-row">
-                    <!-- NAME -->
+
                     <div class="doc-name">
                         <div class="doc-icon">📄</div>
                         <div>
@@ -124,21 +133,15 @@ if (
                         </div>
                     </div>
 
-                    <!-- FORMAT -->
                     <span>PDF</span>
-
-                    <!-- DATE -->
                     <span><?= date("d M Y", strtotime($doc['uploaded_at'])) ?></span>
 
-                    <!-- ACTIONS -->
                     <div class="doc-actions">
-                        <!-- VIEW (ALL USERS) -->
                         <a href="view.php?id=<?= $doc['id'] ?>" target="_blank" class="btn-view">
                             View
                         </a>
 
-                        <!-- ADMIN ONLY -->
-                        <?php if (isset($_SESSION['admin'])): ?>
+                        <?php if ($isAdmin): ?>
                         <a href="/pocogolo/admin/download.php?id=<?= $doc['id'] ?>" class="btn-view">
                             Download
                         </a>
@@ -149,7 +152,8 @@ if (
                         <?php endif; ?>
                     </div>
                 </div>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
+
             </div>
 
         </section>

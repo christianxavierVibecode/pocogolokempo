@@ -1,42 +1,40 @@
 <?php
 session_start();
 require __DIR__ . "/../config/db.php";
-require __DIR__ . "/../includes/auth_admin.php";
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /pocogolo/documents.php");
-    exit;
+/* ADMIN ONLY */
+if (
+    !isset($_SESSION['role']) ||
+    $_SESSION['role'] !== 'admin'
+) {
+    http_response_code(403);
+    exit("Unauthorized");
 }
 
-$title = trim($_POST['title'] ?? '');
-
-if (!$title || !isset($_FILES['file'])) {
-    die("Invalid upload");
+$id = $_GET['id'] ?? null;
+if (!$id) {
+    exit("Invalid document");
 }
 
-$original = $_FILES['file']['name'];
-$ext = strtolower(pathinfo($original, PATHINFO_EXTENSION));
+/* GET FILE */
+$stmt = $pdo->prepare("SELECT filename FROM documents WHERE id = ?");
+$stmt->execute([$id]);
+$doc = $stmt->fetch();
 
-if ($ext !== 'pdf') {
-    die("Only PDF files allowed");
+if (!$doc) {
+    exit("Document not found");
 }
 
-$filename = uniqid() . "_" . preg_replace("/[^a-zA-Z0-9_.-]/", "", $original);
-$uploadDir = __DIR__ . "/../private/uploads/";
-$path = $uploadDir . $filename;
-
-if (!is_writable($uploadDir)) {
-    die("Upload directory not writable");
+/* DELETE FILE */
+$filePath = __DIR__ . "/../private/uploads/" . $doc['filename'];
+if (file_exists($filePath)) {
+    unlink($filePath);
 }
 
-if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
-    die("Upload failed");
-}
+/* DELETE DB */
+$stmt = $pdo->prepare("DELETE FROM documents WHERE id = ?");
+$stmt->execute([$id]);
 
-$stmt = $pdo->prepare(
-    "INSERT INTO documents (title, filename) VALUES (?, ?)"
-);
-$stmt->execute([$title, $filename]);
-
+/* REDIRECT */
 header("Location: /pocogolo/documents.php");
 exit;
