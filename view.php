@@ -1,86 +1,56 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-require __DIR__ . "/../config/db.php";
-require __DIR__ . "/../includes/auth_admin.php"; // admin only
+require __DIR__ . "/config/db.php";
 
-$stmt = $pdo->query("
-    SELECT users.email, documents.title, document_views.viewed_at
-    FROM document_views
-    JOIN users ON users.id = document_views.user_id
-    JOIN documents ON documents.id = document_views.document_id
-    ORDER BY viewed_at DESC
-");
-?>
-<!DOCTYPE html>
-<html lang="en">
+/* ===============================
+   MUST BE LOGGED IN
+================================ */
+if (!isset($_SESSION['role'])) {
+    die("Unauthorized");
+}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Document Activity Log</title>
+if (!isset($_GET['id'])) {
+    die("Missing document ID");
+}
 
-    <!-- Use SAME CSS as documents page -->
-    <link rel="stylesheet" href="/pocogolo/public/css/documents.css">
-    <link rel="stylesheet" href="/pocogolo/public/css/style.css">
-</head>
+$docId = (int) $_GET['id'];
 
-<body>
+/* ===============================
+   GET DOCUMENT
+================================ */
+$stmt = $pdo->prepare("SELECT * FROM documents WHERE id = ?");
+$stmt->execute([$docId]);
+$doc = $stmt->fetch();
 
-    <?php require __DIR__ . "/../includes/navbar.php"; ?>
+if (!$doc) {
+    die("Document not found");
+}
 
-    <main class="container">
+/* ===============================
+   LOG USER VIEW (ONLY USERS)
+================================ */
+if ($_SESSION['role'] === 'user' && isset($_SESSION['user_id'])) {
 
-        <div class="page-header">
-            <h1>Document <span>Activity Log</span></h1>
-            <p class="page-subtitle">
-                Riwayat pengguna yang membuka dokumen
-            </p>
-        </div>
+    $stmt = $pdo->prepare("
+        INSERT INTO document_views (user_id, document_id, viewed_at)
+        VALUES (?, ?, NOW())
+    ");
+    $stmt->execute([$_SESSION['user_id'], $docId]);
+}
 
-        <section class="documents-section">
+/* ===============================
+   SERVE FILE
+================================ */
+$filePath = __DIR__ . "/private/uploads/" . $doc['filename'];
 
-            <div class="documents-header">
-                <h2>Riwayat Akses Dokumen</h2>
-            </div>
+if (!file_exists($filePath)) {
+    die("File not found");
+}
 
-            <div class="documents-table">
-
-                <div class="table-head">
-                    <span>Email</span>
-                    <span>Dokumen</span>
-                    <span>Tanggal</span>
-                </div>
-
-                <?php while ($row = $stmt->fetch()): ?>
-                <div class="table-row">
-
-                    <div class="doc-name">
-                        <div class="doc-icon">👤</div>
-                        <div>
-                            <div class="doc-title">
-                                <?= htmlspecialchars($row['email']) ?>
-                            </div>
-                            <div class="doc-sub">
-                                User Account
-                            </div>
-                        </div>
-                    </div>
-
-                    <span><?= htmlspecialchars($row['title']) ?></span>
-
-                    <span>
-                        <?= date("d M Y H:i", strtotime($row['viewed_at'])) ?>
-                    </span>
-
-                </div>
-                <?php endwhile; ?>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</body>
-
-</html>
+header("Content-Type: application/pdf");
+header("Content-Disposition: inline; filename=\"" . basename($doc['filename']) . "\"");
+readfile($filePath);
+exit;
