@@ -1,275 +1,566 @@
-/* ===============================
-   DOCUMENTS PAGE – GENERAL
-================================ */
+/* ============================================================
+   DOCUMENTS.CSS — Halaman Arsip Dokumen Desa Poco Golo Kempo
+   Mengikuti design system dari style.css (warna, font, spacing)
+   ============================================================ */
 
-/* Base font for documents page */
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f0f6ff;
+/* ========================
+   IMPORT FONT
+======================== */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap");
+
+/* ========================
+   CSS VARIABLES
+======================== */
+:root {
+  --primary: #1a365d;
+  --primary-light: #2b6cb0;
+  --accent: #d69e2e;
+  --accent-light: #ffd700;
+  --danger: #e53e3e;
+  --danger-light: #fed7d7;
+  --success: #276749;
+  --success-light: #c6f6d5;
+  --bg: #f7fafc;
+  --surface: #ffffff;
+  --surface-2: #edf2f7;
+  --border: #e2e8f0;
+  --text: #2d3748;
+  --text-muted: #718096;
+  --text-light: #a0aec0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 32px rgba(26, 54, 93, 0.14);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --transition: 0.22s ease;
 }
 
+/* ========================
+   LAYOUT CONTAINER
+======================== */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 90px 24px 0;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-main {
-    min-height: 75vh;
+main.container {
+  padding-top: 110px; /* offset fixed navbar + running-light */
+  padding-bottom: 80px;
 }
 
-/* Page title */
-h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    margin-top: 10px;
-    color: #1f2937;
-}
-
-.container h1 span {
-    color: #ffd700;
-}
-
+/* ========================
+   PAGE HEADER
+======================== */
 .page-header {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.page-header::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  border-radius: 99px;
+  margin: 20px auto 0;
 }
 
 .page-header h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 34px;
-    font-weight: 700;
-    margin-bottom: 5px;
-    color: #1f2937;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.2;
+  letter-spacing: -0.3px;
 }
 
 .page-header h1 span {
-    color: #facc15; /* soft yellow highlight */
+  color: var(--accent);
 }
 
 .page-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    color: #475569;
-    max-width: 700px;
-    margin: 0 auto;
+  margin-top: 12px;
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* ===============================
+/* ========================
    ADMIN UPLOAD SECTION
-================================ */
+======================== */
 .admin-upload {
-    margin-bottom: 50px;
-    padding: 28px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow-md);
 }
 
 .admin-upload h2 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 18px;
-    color: #111827;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+.admin-upload h2::before {
+  content: "📁";
+  font-size: 1.1rem;
+}
+
+/* Form Upload */
 .admin-upload form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
 }
 
-.admin-upload input[type="text"] {
-    font-family: 'Inter', sans-serif;
-    flex: 1;
-    min-width: 260px;
-    padding: 14px 16px;
-    border-radius: 10px;
-    border: 1px solid #d1d5db;
-    font-size: 15px;
+.admin-upload input[type="text"],
+.admin-upload input[type="file"] {
+  flex: 1 1 220px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: "Inter", sans-serif;
+  font-size: 0.92rem;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.admin-upload input[type="text"]:focus,
+.admin-upload input[type="file"]:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.12);
+  background: #fff;
 }
 
 .admin-upload input[type="file"] {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
+  cursor: pointer;
+  padding: 8px 12px;
 }
 
-.admin-upload button {
-    font-family: 'Inter', sans-serif;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    padding: 12px 22px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
+.admin-upload button[type="submit"] {
+  flex: 0 0 auto;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 26px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+    opacity var(--transition);
+  letter-spacing: 0.3px;
 }
 
-.admin-upload button:hover {
-    background: #1e40af;
+.admin-upload button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(26, 54, 93, 0.3);
 }
 
-/* ===============================
-   DOCUMENTS HEADER
-================================ */
+.admin-upload button[type="submit"]:active {
+  transform: translateY(0);
+  opacity: 0.9;
+}
+
+/* ========================
+   DOCUMENTS SECTION
+======================== */
+.documents-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* Header bar */
 .documents-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 28px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .documents-header h2 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: #111827;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary);
 }
 
+/* Add button */
 .add-btn {
-    font-family: 'Inter', sans-serif;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--primary);
+  border: none;
+  border-radius: var(--radius-xs);
+  padding: 8px 18px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.87rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
 }
 
 .add-btn:hover {
-    background: #1e40af;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(214, 158, 46, 0.35);
 }
 
-/* ===============================
-   DOCUMENT TABLE
-================================ */
+/* ========================
+   TABLE
+======================== */
 .documents-table {
-    background: #ffffff;
-    border-radius: 18px;
-    border: 1px solid #e5e7eb;
-    overflow: hidden;
+  width: 100%;
 }
 
-/* Table Head */
+/* Table head */
 .table-head {
-    display: grid;
-    grid-template-columns: 3fr 1fr 1.5fr 1.5fr;
-    padding: 20px 24px;
-    background: #f3f4f6;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    color: #374151;
+  display: grid;
+  grid-template-columns: 3fr 1fr 1.3fr 1.6fr;
+  gap: 0;
+  background: var(--surface-2);
+  padding: 11px 28px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  border-bottom: 1px solid var(--border);
 }
 
-/* Table Row */
+/* Table rows */
 .table-row {
-    display: grid;
-    grid-template-columns: 3fr 1fr 1.5fr 1.5fr;
-    align-items: center;
-    padding: 22px 24px;
-    border-top: 1px solid #e5e7eb;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    color: #1f2937;
+  display: grid;
+  grid-template-columns: 3fr 1fr 1.3fr 1.6fr;
+  gap: 0;
+  align-items: center;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+
+.table-row:last-child {
+  border-bottom: none;
 }
 
 .table-row:hover {
-    background: #f9fafb;
+  background: #f0f6ff;
 }
 
-/* ===============================
-   DOCUMENT NAME
-================================ */
+/* Doc name cell */
 .doc-name {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
 }
 
 .doc-icon {
-    width: 44px;
-    height: 44px;
-    background: #e0e7ff;
-    color: #1e40af;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ebf4ff, #dbeafe);
+  border: 1px solid #bee3f8;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: transform var(--transition);
+}
+
+.table-row:hover .doc-icon {
+  transform: scale(1.06);
 }
 
 .doc-title {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
 }
 
 .doc-sub {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    color: #6b7280;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 2px;
 }
 
-/* ===============================
-   ACTION BUTTONS
-================================ */
+/* Format badge */
+.table-row > span:nth-child(2) {
+  display: inline-block;
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #fed7d7;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+/* Date */
+.table-row > span:nth-child(3) {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: "Inter", sans-serif;
+}
+
+/* Actions */
 .doc-actions {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-/* View button */
+/* Shared button base */
+.btn-view,
+.btn-delete {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: var(--radius-xs);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+    opacity var(--transition);
+  border: none;
+  white-space: nowrap;
+}
+
+/* View / Download */
 .btn-view {
-    font-family: 'Inter', sans-serif;
-    padding: 8px 18px;
-    border-radius: 8px;
-    border: 1px solid #2563eb;
-    background: #ffffff;
-    color: #2563eb;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.15s ease;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
 }
 
 .btn-view:hover {
-    background: #2563eb;
-    color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 54, 93, 0.28);
+  color: #fff;
 }
 
-/* Delete button */
+/* Delete */
 .btn-delete {
-    font-family: 'Inter', sans-serif;
-    padding: 8px 18px;
-    border-radius: 8px;
-    border: 1px solid #dc2626;
-    background: #ffffff;
-    color: #dc2626;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.15s ease;
+  background: var(--danger-light);
+  color: var(--danger);
+  border: 1px solid #feb2b2;
 }
 
 .btn-delete:hover {
-    background: #dc2626;
-    color: #ffffff;
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.28);
 }
 
-/* ===============================
+/* ========================
    EMPTY STATE
-================================ */
-.no-docs {
-    font-family: 'Inter', sans-serif;
-    padding: 40px;
+======================== */
+.table-row.empty {
+  grid-template-columns: 1fr;
+  padding: 48px 28px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+/* ========================
+   RESPONSIVE — Tablet (≤ 900px)
+======================== */
+@media (max-width: 900px) {
+  .table-head {
+    display: none; /* Sembunyikan header table di mobile/tablet */
+  }
+
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  /* Tampilkan label pseudo sebelum tiap cell */
+  .table-row > span:nth-child(2)::before {
+    content: "Format: ";
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  .table-row > span:nth-child(3)::before {
+    content: "📅 ";
+  }
+
+  .doc-title {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .doc-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* ========================
+   RESPONSIVE — Mobile (≤ 600px)
+======================== */
+@media (max-width: 600px) {
+  main.container {
+    padding-top: 90px;
+    padding-bottom: 48px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .page-header {
+    margin-bottom: 32px;
+  }
+
+  .admin-upload {
+    padding: 22px 18px;
+  }
+
+  .admin-upload form {
+    flex-direction: column;
+  }
+
+  .admin-upload input[type="text"],
+  .admin-upload input[type="file"],
+  .admin-upload button[type="submit"] {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .documents-header {
+    padding: 16px 18px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-btn {
+    width: 100%;
     text-align: center;
-    color: #6b7280;
-    font-size: 15px;
+  }
+
+  .table-row {
+    padding: 14px 18px;
+  }
+
+  .doc-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .btn-view,
+  .btn-delete {
+    padding: 7px 16px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ========================
+   RESPONSIVE — XS (≤ 380px)
+======================== */
+@media (max-width: 380px) {
+  .doc-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-view,
+  .btn-delete {
+    text-align: center;
+  }
+}
+
+/* ========================
+   ANIMATIONS / ENTRANCE
+======================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-header {
+  animation: fadeInUp 0.5s ease both;
+}
+
+.admin-upload {
+  animation: fadeInUp 0.5s 0.1s ease both;
+}
+
+.documents-section {
+  animation: fadeInUp 0.5s 0.18s ease both;
+}
+
+.table-row {
+  animation: fadeInUp 0.35s ease both;
+}
+
+/* Staggered delay per row (max 8 rows) */
+.table-row:nth-child(1) {
+  animation-delay: 0.22s;
+}
+.table-row:nth-child(2) {
+  animation-delay: 0.28s;
+}
+.table-row:nth-child(3) {
+  animation-delay: 0.34s;
+}
+.table-row:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.table-row:nth-child(5) {
+  animation-delay: 0.46s;
+}
+.table-row:nth-child(6) {
+  animation-delay: 0.52s;
+}
+.table-row:nth-child(7) {
+  animation-delay: 0.58s;
+}
+.table-row:nth-child(8) {
+  animation-delay: 0.64s;
 }

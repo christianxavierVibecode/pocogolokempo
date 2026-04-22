@@ -36,4 +36,4 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
 $stmt = $pdo->prepare(
     "INSERT INTO documents (title, filename) VALUES (?, ?)"
 );
-$stmt->execute([$title, $fi]()
+$stmt->execute([$title, $fi]);
