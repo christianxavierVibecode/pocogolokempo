@@ -9,7 +9,7 @@ require __DIR__ . "/config/db.php";
    REQUIRE LOGIN (ADMIN OR USER)
 ================================ */
 if (!isset($_SESSION['role'])) {
-    header("Location: /pocogolo/auth/login.php");
+    header("Location: /auth/login.php");
     exit;
 }
 
@@ -143,10 +143,10 @@ $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
 
                         <?php if ($isAdmin): ?>
-                        <a href="/pocogolo/admin/download.php?id=<?= $doc['id'] ?>" class="btn-view">
+                        <a href="/admin/download.php?id=<?= $doc['id'] ?>" class="btn-view">
                             Download
                         </a>
-                        <a href="/pocogolo/admin/delete.php?id=<?= $doc['id'] ?>" class="btn-delete"
+                        <a href="/admin/delete.php?id=<?= $doc['id'] ?>" class="btn-delete"
                             onclick="return confirm('Delete this document?')">
                             Hapus
                         </a>

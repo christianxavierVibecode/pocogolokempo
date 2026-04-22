@@ -20,8 +20,8 @@ $stmt = $pdo->query("
     <title>Document Activity Log</title>
 
     <!-- Use SAME CSS as documents page -->
-    <link rel="stylesheet" href="/pocogolo/public/css/documents.css">
-    <link rel="stylesheet" href="/pocogolo/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/documents.css">
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 
 <body>

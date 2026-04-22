@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 </div>
                 <?php endif; ?>
 
-                <form method="POST" action="/pocogolo/auth/login-process.php" class="auth-form">
+                <form method="POST" action="/auth/login-process.php" class="auth-form">
 
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -156,7 +156,7 @@ if ($admin && password_verify($password, $admin['password'])) {
     $_SESSION['role'] = 'admin';
     $_SESSION['admin_id'] = $admin['id'];
 
-    header("Location: /pocogolo/documents.php");
+    header("Location: /documents.php");
     exit;
 }
 
@@ -169,7 +169,7 @@ if ($user && password_verify($password, $user['password'])) {
     $_SESSION['role'] = 'user';
     $_SESSION['user_id'] = $user['id'];
 
-    header("Location: /pocogolo/documents.php");
+    header("Location: /documents.php");
     exit;
 }
 

@@ -4,7 +4,7 @@ require __DIR__ . "/../config/db.php";
 require __DIR__ . "/../includes/auth_admin.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /pocogolo/documents.php");
+    header("Location: /documents.php");
     exit;
 }
 

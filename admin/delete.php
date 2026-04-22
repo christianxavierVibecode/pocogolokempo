@@ -36,5 +36,5 @@ $stmt = $pdo->prepare("DELETE FROM documents WHERE id = ?");
 $stmt->execute([$id]);
 
 /* REDIRECT */
-header("Location: /pocogolo/documents.php");
+header("Location: /documents.php");
 exit;
