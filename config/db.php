@@ -1,8 +1,13 @@
 <?php
 $host = "localhost";
-$db   = "pocogolo_desa_db";     // ← change this
-$user = "pocogolo_admin";        // ← change this
-$pass = "pocogolo2007";   // ← change this
+$db   = "pocogolo_desa_db";  
+$user = "pocogolo_admin";       
+$pass = "pocogolo2007";   
+
+// $host = "localhost";
+// $db   = "desa_db";
+// $user = "root";
+// $pass = "";
 
 try {
     $pdo = new PDO(

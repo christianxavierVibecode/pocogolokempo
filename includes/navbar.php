@@ -15,26 +15,23 @@ if (session_status() === PHP_SESSION_NONE) {
             <li><a href="#struktur">Struktur</a></li>
             <li><a href="#contact-section">Kontak</a></li>
 
-            <!-- MENU DATABASE -->
             <li>
                 <?php if (isset($_SESSION['role'])): ?>
-                <a href="documents.php">Database</a>
+                <a href="/documents.php">Database</a>
                 <?php else: ?>
                 <a href="#" onclick="openLoginModal(); return false;">Database</a>
                 <?php endif; ?>
             </li>
 
-            <!-- ADMIN ONLY -->
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
             <li>
-                <a href="admin/activity_log.php">Riwayat</a>
+                <a href="/admin/activity_log.php">Riwayat</a>
             </li>
             <?php endif; ?>
 
-            <!-- LOGOUT -->
             <?php if (isset($_SESSION['role'])): ?>
             <li>
-                <a href="/pocogolo/auth/logout.php">Logout</a>
+                <a href="/auth/logout.php">Logout</a>
             </li>
             <?php endif; ?>
         </ul>
