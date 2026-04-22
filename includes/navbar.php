@@ -18,7 +18,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <!-- MENU DATABASE -->
             <li>
                 <?php if (isset($_SESSION['role'])): ?>
-                <a href="/pocogolo/documents.php">Database</a>
+                <a href="documents.php">Database</a>
                 <?php else: ?>
                 <a href="#" onclick="openLoginModal(); return false;">Database</a>
                 <?php endif; ?>
@@ -27,7 +27,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <!-- ADMIN ONLY -->
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
             <li>
-                <a href="/pocogolo/admin/activity_log.php">Riwayat</a>
+                <a href="admin/activity_log.php">Riwayat</a>
             </li>
             <?php endif; ?>
 
