@@ -188,56 +188,71 @@ document.addEventListener("DOMContentLoaded", function() {
     </div> -->
     <!-- Login / Register Modal -->
     <div id="loginModal" class="modal">
-        <span class="close" onclick="closeLoginModal()" style="top: 10px; right: 20px; font-size: 30px">&times;</span>
 
-        <div id="loginLoader">
+        <!-- CLOSE BUTTON -->
+        <span class="close" onclick="closeLoginModal()" style="top:10px; right:20px; font-size:30px; cursor:pointer;">
+            &times;
+        </span>
+
+        <!-- LOADER (hidden by default) -->
+        <div id="loginLoader" style="display:none;">
             <div class="login-spinner"></div>
         </div>
 
         <div id="loginContainer" class="login-container">
+
             <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Lambang_Kabupaten_Manggarai_Barat.png"
                 alt="Logo Kabupaten Manggarai Barat" class="login-logo" />
 
-            <h1 class="login-h1">Sistem Database<br />Perangkat Desa Poco Golo Kempo</h1>
+            <h1 class="login-h1">
+                Sistem Database<br />Perangkat Desa Poco Golo Kempo
+            </h1>
 
-            <!-- LOGIN FORM -->
+            <!-- ================= LOGIN ================= -->
             <form class="login-form" id="loginForm" action="/pocogolo/auth/login.php" method="post">
+
                 <label class="login-label">Username / Email</label>
-                <input class="login-input" type="text" name="username" required />
+                <input class="login-input" type="text" name="username" required>
 
                 <label class="login-label">Password</label>
-                <input class="login-input" type="password" name="password" required />
+                <input class="login-input" type="password" name="password" required>
 
                 <button class="login-button" type="submit">Masuk</button>
 
                 <p class="switch-text">
                     Belum punya akun?
-                    <a href="#" class="switch-span" onclick="showRegister(); return false;">
-                        Daftar di sini
-                    </a>
+                    <a href="#" onclick="showRegister(event)">Daftar di sini</a>
                 </p>
             </form>
 
-            <!-- REGISTER FORM -->
+            <!-- ================= REGISTER ================= -->
             <form class="login-form" id="registerForm" action="/pocogolo/auth/register.php" method="post"
                 style="display:none;">
+
+                <label class="login-label">Username</label>
+                <input class="login-input" type="text" name="username" required>
+
                 <label class="login-label">Email</label>
-                <input class="login-input" type="email" name="email" required />
+                <input class="login-input" type="email" name="email" required>
 
                 <label class="login-label">Password</label>
-                <input class="login-input" type="password" name="password" required />
+                <input class="login-input" type="password" name="password" required>
+
+                <label class="login-label">Konfirmasi Password</label>
+                <input class="login-input" type="password" name="confirm_password" required>
 
                 <button class="login-button" type="submit">Daftar</button>
 
                 <p class="switch-text">
                     Sudah punya akun?
-                    <span class="switch-span" onclick="showLogin()">Login di sini</span>
+                    <a href="#" onclick="showLogin(event)">Login di sini</a>
                 </p>
             </form>
 
-            <p style="margin-top: 20px; font-size: 12px; color: #888">
+            <p style="margin-top:20px; font-size:12px; color:#888;">
                 &copy; 2025 Perangkat Desa Poco Golo Kempo
             </p>
+
         </div>
     </div>
 

@@ -1,11 +1,15 @@
-function showRegister() {
+function showRegister(e) {
+    e.preventDefault();
+
     document.getElementById('loginForm').style.display = 'none';
     document.getElementById('registerForm').style.display = 'block';
 }
 
-function showLogin() {
-    document.getElementById("registerForm").style.display = "none";
-    document.getElementById("loginForm").style.display = "block";
+function showLogin(e) {
+    e.preventDefault();
+
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
 }
 
 function initStars() {
