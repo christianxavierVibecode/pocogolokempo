@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <h1 class="login-h1">Sistem Database<br />Perangkat Desa Poco Golo Kempo</h1>
 
             <!-- LOGIN FORM -->
-            <form class="login-form" id="loginForm" action="auth/login.php" method="post">
+            <form class="login-form" id="loginForm" action="/pocogolo/auth/login.php" method="post">
                 <label class="login-label">Username / Email</label>
                 <input class="login-input" type="text" name="username" required />
 
@@ -217,7 +217,8 @@ document.addEventListener("DOMContentLoaded", function() {
             </form>
 
             <!-- REGISTER FORM -->
-            <form class="login-form" id="registerForm" action="auth/register.php" method="post" style="display:none;">
+            <form class="login-form" id="registerForm" action="/pocogolo/auth/register.php" method="post"
+                style="display:none;">
                 <label class="login-label">Email</label>
                 <input class="login-input" type="email" name="email" required />
 
