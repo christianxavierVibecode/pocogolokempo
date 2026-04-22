@@ -1,8 +1,8 @@
 <?php
 $host = "localhost";
-$db   = "desa_db";
-$user = "root";
-$pass = "";
+$db   = "pocogolo_desa_db";     // ← change this
+$user = "pocogolo_admin";        // ← change this
+$pass = "pocogolo2007";   // ← change this
 
 try {
     $pdo = new PDO(
@@ -15,5 +15,5 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    die("Database connection failed");
+    die("Database connection failed: " . $e->getMessage());
 }
