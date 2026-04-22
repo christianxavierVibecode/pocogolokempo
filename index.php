@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </h1>
 
             <!-- ================= LOGIN ================= -->
-            <form class="login-form" id="loginForm" action="/pocogolo/auth/login.php" method="post">
+            <form class="login-form" id="loginForm" action="auth/login.php" method="post">
 
                 <label class="login-label">Username / Email</label>
                 <input class="login-input" type="text" name="username" required>
@@ -226,8 +226,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </form>
 
             <!-- ================= REGISTER ================= -->
-            <form class="login-form" id="registerForm" action="/pocogolo/auth/register.php" method="post"
-                style="display:none;">
+            <form class="login-form" id="registerForm" action="auth/register.php" method="post" style="display:none;">
 
                 <label class="login-label">Username</label>
                 <input class="login-input" type="text" name="username" required>
